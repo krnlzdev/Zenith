@@ -6,6 +6,8 @@ module DatabaseManager
   # Openning the database
   DB = SQLite3::Database.new 'task_manager.db'
 
+  DB.results_as_hash = true
+
   def self.setup_database
     puts "Database setup"
     # Creating the table 'users'
