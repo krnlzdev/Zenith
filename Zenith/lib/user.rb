@@ -52,7 +52,7 @@ class User
 
     # Save in database
     DatabaseManager::DB.execute(
-      "insert into users (username, password_digest) values (?, ?)", new_user.username, new_user.password_digest
+      "insert into users (username, password_digest) values (?, ?)", [new_user.username, new_user.password_digest]
     )
 
     return self.authenticate(username, password)

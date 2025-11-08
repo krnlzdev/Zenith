@@ -2,16 +2,19 @@ GEM
   remote: https://rubygems.org/
   specs:
     bcrypt (3.1.20)
+    mini_portile2 (2.8.9)
     minitest (5.26.0)
-    sqlite3 (2.8.0-x64-mingw-ucrt)
+    sqlite3 (1.7.3)
+      mini_portile2 (~> 2.8.0)
 
 PLATFORMS
   x64-mingw-ucrt
+  x86_64-linux
 
 DEPENDENCIES
   bcrypt
   minitest
-  sqlite3
+  sqlite3 (~> 1.4)
 
 BUNDLED WITH
    2.7.2
