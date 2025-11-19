@@ -2,47 +2,42 @@ require_relative 'database_manager'
 
 class Task
     attr_accessor :id, :subject, :user_id, :description, :completed
+    def initialize(props)
+        @id = props['id']
+        @subject = props['subject']
+        @user_id = props['user_id']
+        @description = props['description']
+        @completed = props['completed'] == 1 
+    end  
 
-    def initialize(:id, :subject, :user_id, :description, :completed)
-        @id = id
-        @subject = subject
-        @user_id = user_id
-        @description = description
-        @completed = completed == 1
-    end 
+   
+    def self.create_task(subject, user_id, description) 
 
-    def self.create_task(subject, user_id, description, completed)
-        new_task = self.new(subject, user_id, description, completed)
         DatabaseManager::DB.execute(
-            "insert into tasks (text, user_id, description, completed) values (?, ?, ?, ?)", 
-            [@subject, @user_id, @description, @completed ? 1 : 0]
+            "INSERT INTO tasks (subject, user_id, description, completed) VALUES (?, ?, ?, 0)", 
+            subject, 
+            user_id, 
+            description
         )
     end
-    
+
     def display_task
-        status = @completed ? "Completed" : "Pending"
-        puts "Subject: #{@subject} - Completed: #{status}\nDescription: #{@description}"
-    end 
+        status = @completed ? "[✅ Completed]" : "[❌ Pending]"
+        puts "Subject: #{@subject} #{status}\n   Description: #{@description}"
+    end  
 
     def self.get_tasks_by_user(user_id)
         tasks_db = DatabaseManager::DB.execute(
-            "select * from tasks where user_id = ?", user_id
+            "SELECT * FROM tasks WHERE user_id = ?", user_id
         )
-        tasks = tasks_db.map do |task_data|
-            Task.new(task_data.id, 
-                    task_data.subject,
-                    task_data.user_id, 
-                    task_data.description,
-                    task_data.completed)
-        end
-        return tasks
+        # Mappe chaque Hash retourné en objet Task en utilisant le constructeur corrigé Task.new(props)
+        tasks_db.map { |task_data| Task.new(task_data) }
     end
 
     def mark_completed
-    DatabaseManager::DB.execute(
-      "UPDATE tasks SET completed = 1 WHERE id = ?", self.id
-    )
-    @completed = true
-  end
-  
+        DatabaseManager::DB.execute(
+            "UPDATE tasks SET completed = 1 WHERE id = ?", self.id
+        )
+        @completed = true
+    end
 end

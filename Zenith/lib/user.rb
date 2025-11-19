@@ -57,4 +57,8 @@ class User
 
     return self.authenticate(username, password)
   end
+
+  def tasks
+    Task.get_tasks_by_user(self.id)
+  end
 end
