@@ -30,7 +30,6 @@ class Task
         tasks_db = DatabaseManager::DB.execute(
             "SELECT * FROM tasks WHERE user_id = ?", user_id
         )
-        # Mappe chaque Hash retourné en objet Task en utilisant le constructeur corrigé Task.new(props)
         tasks_db.map { |task_data| Task.new(task_data) }
     end
 
